@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "ecosystem": "xunia",
+  "house": {
+    "id": "red-house",
+    "name": "The Red House",
+    "repository": "sonoxo/theredhouse",
+    "domain": "security",
+    "role": "authorized-adversarial-security-and-remediation",
+    "status": "integrated"
+  },
+  "capabilities": [
+    "authorized-reconnaissance",
+    "controlled-security-validation",
+    "security-knowledge-graph",
+    "finding-triage",
+    "risk-normalization",
+    "remediation-orchestration",
+    "github-pull-request-remediation",
+    "security-telemetry-export"
+  ],
+  "ontology": {
+    "objects": [
+      "Asset",
+      "Finding",
+      "Evidence",
+      "Risk",
+      "Relationship",
+      "Control",
+      "Remediation",
+      "ChangeSet",
+      "Run"
+    ],
+    "required_context": [
+      "authorization",
+      "environment",
+      "source",
+      "timestamp",
+      "confidence"
+    ]
+  },
+  "relationships": {
+    "control_plane": "xunia-hq",
+    "peer_layers": [
+      "black-house",
+      "green-house",
+      "zyra"
+    ],
+    "bio_workload_policy": "protected-high-sensitivity-non-destructive-by-default"
+  },
+  "guardrails": {
+    "authorization_required": true,
+    "human_review_for_disruptive_actions": true,
+    "human_review_for_remediation_merge": true,
+    "implicit_cross_house_authorization": false,
+    "default_external_mode": "observe-and-report"
+  },
+  "documentation": {
+    "ecosystem_guide": "XUNIA_ECOSYSTEM.md",
+    "upstream_readme": "README.md",
+    "security_policy": "SECURITY.md",
+    "legal_disclaimer": "DISCLAIMER.md"
+  }
+}
