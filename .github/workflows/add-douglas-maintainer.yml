@@ -1,0 +1,75 @@
+name: Add Douglas Brown maintainer profile
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - .github/workflows/add-douglas-maintainer.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add Douglas Brown to Maintainers
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("README.md")
+          text = path.read_text(encoding="utf-8")
+
+          if "<b>Douglas Brown</b>: XUNIA Ecosystem Maintainer" in text:
+              print("Douglas Brown maintainer profile already present; no change needed.")
+              raise SystemExit(0)
+
+          section_start = text.find("### Maintainers")
+          if section_start < 0:
+              raise SystemExit("Maintainers section not found")
+
+          table_start = text.find("<table>", section_start)
+          table_end = text.find("</table>", table_start)
+          if table_start < 0 or table_end < 0:
+              raise SystemExit("Maintainers table not found")
+
+          section = text[table_start:table_end + len("</table>")]
+
+          # Preserve the two upstream maintainers while making room for a third peer column.
+          section = section.replace('width="50%"', 'width="33.33%"')
+
+          row_end = section.rfind("</tr>")
+          if row_end < 0:
+              raise SystemExit("Maintainers table row not found")
+
+          douglas = '''<td align="center" valign="top" width="33.33%">
+<img src="https://github.com/sonoxo.png?size=240" alt="Douglas Brown" width="120"/><br/>
+<b>Douglas Brown</b>: XUNIA Ecosystem Maintainer & AI/Security Systems Builder<br/><br/>
+<small>Creator and maintainer in the XUNIA / ZYRA ecosystem, focused on governed agentic systems, security architecture, ontology-driven workflows, AI application development, and auditable human-controlled execution. The ZYRA credential ledger records 34 credential, training, and professional-development records across Palantir Foundry/AIP, Google Cybersecurity, Google AI, IBM Quantum / Machine Learning, Red Hat systems administration, Business Intelligence, Data Science, application development, and related technical training. Credential evidence remains tiered by issuer verification and supplied provenance.</small><br/><br/>
+<a href="https://www.linkedin.com/in/douglasbrownjr/">LinkedIn</a> · <a href="https://github.com/sonoxo">GitHub</a> · <a href="https://github.com/sonoxo/zyra">ZYRA</a><br/><br/>
+<b>Selected credential evidence</b><br/>
+<small>Palantir Foundry Aware · Introduction to Foundry & AIP for Enterprise Organizations · Deep Dive: Data Protection Tools in Foundry · Palantir Data Science Fundamentals · Google Cybersecurity Professional Certificate · Google AI Professional Certificate · IBM Quantum Machine Learning · Red Hat System Administration I training · Foundations of Business Intelligence.</small><br/><br/>
+<a href="https://github.com/sonoxo/zyra/blob/main/ZYRA.README.md"><b>View ZYRA credential ledger</b></a>
+</td>
+'''
+
+          section = section[:row_end] + douglas + section[row_end:]
+          updated = text[:table_start] + section + text[table_end + len("</table>"):]
+          path.write_text(updated, encoding="utf-8")
+
+      - name: Commit README update
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "No README change required."
+            exit 0
+          fi
+          git config user.name "xunia-ecosystem-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: add Douglas Brown to maintainers"
+          git push
