@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "ecosystem_version": "4.0.0",
+  "repo": "sonoxo/theredhouse",
+  "plane_id": "red-house",
+  "role": "authorized-security",
+  "control_root": "sonoxo/gpt-doug-llm",
+  "execution_plane": "sonoxo/zyra",
+  "responsibilities": ["authorized assessment", "finding normalization", "risk", "security knowledge graph", "remediation", "reviewable fixes"],
+  "collective_ai_layers": ["classical_ai", "machine_learning", "neural_networks", "deep_learning", "generative_ai", "agentic_ai"],
+  "authority_boundary": "Security activity is limited to systems owned by the operator or explicitly authorized for assessment; ecosystem membership creates no target authorization."
+}
